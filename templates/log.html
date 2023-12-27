@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Free Throw Log {% endblock %}</h1>
+    {% for log in logs %}
+        <div class='post'>
+            <h2>{{ log['sessionDate'] }}</p>
+            <p>Free Throws Made: {{ log['ftMade'] }}</h2>
+            <p>Free Throws ftAttempted: {{ log['ftAttempted'] }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -7,7 +7,9 @@
         .post {
             padding: 10px;
             margin: 5px;
-            background-color: #f3f3f3
+            background-color: #f3f3f3;
+            text-align: center;
+            width: 50%;
         }
 
         nav a {
@@ -23,9 +25,9 @@
 <body>
     <nav>
         <a href="{{ url_for('index') }}">Free Throw Tracker</a>
-        <a href="#">Add FT Session</a>
-        <a href="#">FT Statistics</a>
-        <a href="#">FT Log</a>
+        <a href="{{ url_for('add') }}">Add FT Session</a>
+        <a href="{{ url_for('statistics') }}">FT Statistics</a>
+        <a href="{{ url_for('freethrowlog') }}">FT Log</a>
         
     </nav>
     <hr>
