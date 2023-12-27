@@ -14,7 +14,7 @@
             <td>{{ log['sessionDate'] }}</td>
             <td>{{ log['ftMade'] }}</td>
             <td>{{ log['ftAttempted'] }}</td>
-            <td><button>Edit</button> | <button>Delete</button></td>
+            <td><a href="{{url_for('edit',id=log.id)}}">Edit</a> | <a>Delete</a></td>
            
         </tr>
         

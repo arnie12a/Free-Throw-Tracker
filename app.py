@@ -15,8 +15,8 @@ def index():
     return render_template('index.html')
 
 # Page that has the log where you can edit and delete data in database
-@app.route('/freethrowlog')
-def freethrowlog():
+@app.route('/log')
+def log():
     conn = get_db_connection()
     logs = conn.execute('SELECT * FROM freethrowlog').fetchall()
     conn.close()
@@ -45,14 +45,31 @@ def add():
                     )
                 conn.commit()
                 conn.close()
-                return redirect(url_for("freethrowlog"))
+                return redirect(url_for("log"))
     if request.method == "GET":
         return render_template('add.html')
 
 # Edit a FT session data
 @app.route("/edit/<string:id>",methods=['POST','GET'])
 def edit(id):
-    pass
+    if request.method == 'POST':
+        date = str(request.form.get("date"))
+        ftmade = request.form.get("ftmade")
+        ftattempted = request.form.get("ftattempted")
+        if date and ftmade and ftattempted:
+            if ftattempted > ftmade:
+                conn = get_db_connection()
+                conn.execute("update freethrowlog set date=?,ftmade=?,ftattempted=?, where id=?",(date,ftmade,ftattempted, id))
+                conn.commit()
+                conn.close()
+                return redirect(url_for("log"))
+
+    return redirect(url_for("log"))
+
+# Delete the FT session data
+@app.route("/delete.<string:id>", methods=['GET'])
+def delete(id):
+    return
 
 # Run the application
 if __name__ == '__main__':  
