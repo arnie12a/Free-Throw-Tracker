@@ -2,11 +2,24 @@
 
 {% block content %}
     <h1>{% block title %} Free Throw Log {% endblock %}</h1>
-    {% for log in logs %}
-        <div class='post'>
-            <h2>{{ log['sessionDate'] }}</p>
-            <p>Free Throws Made: {{ log['ftMade'] }}</h2>
-            <p>Free Throws ftAttempted: {{ log['ftAttempted'] }}</p>
-        </div>
-    {% endfor %}
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>FT Made</th>
+            <th>FT Attempted</th>
+            <th>Options</th>
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log['sessionDate'] }}</td>
+            <td>{{ log['ftMade'] }}</td>
+            <td>{{ log['ftAttempted'] }}</td>
+            <td><button>Edit</button> | <button>Delete</button></td>
+           
+        </tr>
+        
+        {% endfor %}
+
+    </table>
+    
 {% endblock %}
