@@ -2,16 +2,25 @@
 
 {% block content %}
     <h1>{% block title %} Edit FT Session Data {% endblock %}</h1>
-    <form action="{{ url_for('add')}}" method="post">
+    <form action="{{ url_for('edit', id=data[0]['id'])}}" method="post">
+
+        <h4>Data Before</h4>
+        <p>{{data[0]['sessionDate']}} {{data[0]['ftmade']}} {{data[0]['ftattempted']}} {{ data[0]['locationName'] }}</p>
+
+
         <label for="date">Date: </label>
-        <input type="date" id="date" name="date" >
+        <input type="date" id="date" name="date" value='{{data[0]["sessionDate"]}}'>
 
         <label for="ftmade">Free Throws Made: </label>
-        <input type="number" id="ftmade" name="ftmade" >
+        <input type="number" id="ftmade" name="ftmade" value='{{data[0]["ftmade"]}}'>
 
         <label for="ftattempted">Free Throws Attempted: </label>
-        <input type="number" id="ftattempted" name="ftattempted" >
+        <input type="number" id="ftattempted" name="ftattempted" value='{{data[0]["ftattempted"]}}'>
 
-        <button type="submit">submit</button>
+        <label for="location">Location: </label>
+        <input type="text" id="location" name="location" value='{{data[0]["locationName"]}}' >
+
+        <a href='{{url_for("log")}}'>Cancel</a>
+        <button type="submit">Submit</button>
     </form>
 {% endblock %}

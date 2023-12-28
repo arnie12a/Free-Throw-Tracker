@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Would you like to delete the record? {% endblock %}</h1>
+    <p>{{data[0]['sessionDate']}} {{data[0]['ftmade']}} {{data[0]['ftattempted']}} {{ data[0]['locationName'] }}</p>
+
+    <form action="{{ url_for('delete', id=data[0]['id'])}}" method="post">
+        <button type="submit">Yes</button>
+        <a href='{{url_for("log")}}'>No</a>
+    </form>
+{% endblock %}

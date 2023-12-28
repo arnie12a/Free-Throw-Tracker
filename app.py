@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 app = Flask(__name__)
 
@@ -35,41 +35,83 @@ def add():
         date = str(request.form.get("date"))
         ftmade = request.form.get("ftmade")
         ftattempted = request.form.get("ftattempted")
+        location = request.form.get("location")
 
         # Do some validation
-        if date and ftmade and ftattempted:
+        if date and ftmade and ftattempted and location:
             if ftattempted > ftmade:
                 conn = get_db_connection()
-                conn.execute("INSERT INTO freethrowlog (sessionDate, ftMade, ftAttempted) VALUES (?, ?, ?)",
-                    (date, ftmade, ftattempted)
+                conn.execute("INSERT INTO freethrowlog (sessionDate, ftMade, ftAttempted, locationName) VALUES (?, ?, ?, ?)",
+                    (date, ftmade, ftattempted, location)
                     )
                 conn.commit()
                 conn.close()
                 return redirect(url_for("log"))
+            else:
+                return redirect(url_for('error'))
+        else:
+            return redirect(url_for('error'))
     if request.method == "GET":
         return render_template('add.html')
 
-# Edit a FT session data
+# Edit a FT session data -> Handle the GET
 @app.route("/edit/<string:id>",methods=['POST','GET'])
 def edit(id):
     if request.method == 'POST':
+
         date = str(request.form.get("date"))
-        ftmade = request.form.get("ftmade")
-        ftattempted = request.form.get("ftattempted")
+        ftmade = int(request.form.get("ftmade"))
+        ftattempted = int(request.form.get("ftattempted"))
+        location = request.form.get("location")
+
         if date and ftmade and ftattempted:
             if ftattempted > ftmade:
                 conn = get_db_connection()
-                conn.execute("update freethrowlog set date=?,ftmade=?,ftattempted=?, where id=?",(date,ftmade,ftattempted, id))
+                conn.execute("UPDATE freethrowlog SET sessionDate=?,ftmade=?,ftattempted=?,locationName=? WHERE id=?",(date,ftmade,ftattempted, location, id))
                 conn.commit()
                 conn.close()
                 return redirect(url_for("log"))
+            else:
+                return redirect(url_for('error'))
+        else:
+            return redirect(url_for('error'))
+        
 
-    return redirect(url_for("log"))
+    if request.method == 'GET':
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM freethrowlog WHERE ID=?", (id,))
+        data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        date = str(data[0]['sessionDate'])
+        return render_template("edit.html", data=data, date=date)
+
 
 # Delete the FT session data
-@app.route("/delete.<string:id>", methods=['GET'])
+@app.route("/delete.<string:id>", methods=['GET', 'POST'])
 def delete(id):
-    return
+    if request.method == 'GET':
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM freethrowlog WHERE ID=?", (id,))
+        data = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return render_template("delete.html", data=data)
+
+
+    if request.method == 'POST':
+        conn = get_db_connection()
+        conn.execute("DELETE FROM freethrowlog WHERE ID=?", (id,))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('log'))
+
+# For when you have gotten a error in the app
+@app.route("/error")
+def error():
+    return render_template('error.html')
 
 # Run the application
 if __name__ == '__main__':  

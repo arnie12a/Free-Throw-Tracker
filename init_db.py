@@ -8,12 +8,12 @@ with open('schema.sql') as f:
 
 cur = connection.cursor()
 
-cur.execute("INSERT INTO freethrowlog (sessionDate, ftMade, ftAttempted) VALUES (?, ?, ?)",
-            ('11/12/2023', 23, 25)
+cur.execute("INSERT INTO freethrowlog (sessionDate, ftMade, ftAttempted, locationName) VALUES (?, ?, ?, ?)",
+            ('11/12/2023', 23, 25, 'Madison')
             )
 
-cur.execute("INSERT INTO freethrowlog (sessionDate, ftMade, ftAttempted) VALUES (?, ?, ?)",
-            ('12/22/2023', 12, 15)
+cur.execute("INSERT INTO freethrowlog (sessionDate, ftMade, ftAttempted, locationName) VALUES (?, ?, ?, ?)",
+            ('12/22/2023', 12, 15, "South Barrington")
             )
 
 connection.commit()
