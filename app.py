@@ -1,6 +1,14 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, flash
 
+def calculateAveragePercentage(table):
+    totalFTmade = 0
+    totalFTattempted = 0
+    for i in range(len(table)):
+        totalFTmade += table[i]['ftmade']
+        totalFTattempted += table[i]['ftattempted']
+    return round((totalFTmade/totalFTattempted)*100, 2)
+
 app = Flask(__name__)
 
 # Connecting to the database
@@ -25,7 +33,13 @@ def log():
 # Page for statistics and has dashboard
 @app.route('/statistics')
 def statistics():
-    return render_template('stats.html')
+    conn = get_db_connection()
+    logs = conn.execute('SELECT * FROM freethrowlog ORDER BY sessionDate ASC').fetchall()
+    conn.close()
+
+    # Calculate the average shooting percentage from the ft line
+    percentage = calculateAveragePercentage(logs)
+    return render_template('stats.html', percentage=percentage)
 
 # Add free throw session to the database
 @app.route('/add', methods = ["GET", "POST"])
