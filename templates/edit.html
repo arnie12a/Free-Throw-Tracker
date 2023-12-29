@@ -22,32 +22,19 @@
                     <div class="form-group col-sm-12">
                         <label for="date" >Date: </label>
                         <input type="date" class="form-control" id="date" name="date" value='{{data[0]["sessionDate"]}}'>
-                    </div>
+                    </div><br>
                     <div class="form-group col-sm-12">
                         <label for="ftmade">Free Throws Made: </label>
                         <input type="number" class="form-control" id="ftmade" name="ftmade" value='{{data[0]["ftmade"]}}'>
-                    </div>
+                    </div><br>
                     <div class="form-group col-sm-12">
                         <label for="ftmade">Free Throws Attempted: </label>
                         <input type="number" class="form-control" id="ftattempted" name="ftattempted" value='{{data[0]["ftattempted"]}}'>
-                    </div>
+                    </div><br>
                     <div class="form-group col-sm-12">
                         <label for="location">Location: </label>
                         <input type="text" class="form-control" id="location" name="location" value='{{data[0]["locationName"]}}'>
                     </div>
-                    <!--
-                    <label for="date">Date: </label>
-                    <input type="date" id="date" name="date" value='{{data[0]["sessionDate"]}}'>
-
-                    <label for="ftmade">Free Throws Made: </label>
-                    <input type="number" id="ftmade" name="ftmade" value='{{data[0]["ftmade"]}}'>
-
-                    <label for="ftattempted">Free Throws Attempted: </label>
-                    <input type="number" id="ftattempted" name="ftattempted" value='{{data[0]["ftattempted"]}}'>
-
-                    <label for="location">Location: </label>
-                    <input type="text" id="location" name="location" value='{{data[0]["locationName"]}}' >
-                    -->
                     <br>
                     <a href='{{url_for("log")}}' class="btn btn-secondary" role="button">Cancel</a>
                     <button type="submit" class="btn btn-primary">Submit</button>
