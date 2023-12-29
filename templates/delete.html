@@ -1,11 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Would you like to delete the record? {% endblock %}</h1>
-    <p>{{data[0]['sessionDate']}} {{data[0]['ftmade']}} {{data[0]['ftattempted']}} {{ data[0]['locationName'] }}</p>
-
-    <form action="{{ url_for('delete', id=data[0]['id'])}}" method="post">
-        <button type="submit">Yes</button>
-        <a href='{{url_for("log")}}'>No</a>
-    </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 mx-auto text-center ">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-header">
+                        <h5>Would you like to delete this record?</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Date: {{data[0]['sessionDate']}}</li>
+                        <li class="list-group-item">FT Made: {{data[0]['ftmade']}}</li>
+                        <li class="list-group-item">FT Attempted: {{data[0]['ftattempted']}}</li>
+                        <li class="list-group-item">Location: {{ data[0]['locationName'] }}</li>
+                    </ul>
+                    <form action="{{ url_for('delete', id=data[0]['id'])}}" method="post">
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                        <a href='{{url_for("log")}}' class="btn btn-secondary" role="button">No</a>
+                    </form>
+                </div>
+            
+                
+            </div>
+        </div>
+    </div>
 {% endblock %}

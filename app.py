@@ -18,7 +18,7 @@ def index():
 @app.route('/log')
 def log():
     conn = get_db_connection()
-    logs = conn.execute('SELECT * FROM freethrowlog').fetchall()
+    logs = conn.execute('SELECT * FROM freethrowlog ORDER BY sessionDate ASC').fetchall()
     conn.close()
     return render_template('log.html', logs=logs)
 
@@ -33,8 +33,8 @@ def add():
     if request.method == "POST":
 
         date = str(request.form.get("date"))
-        ftmade = request.form.get("ftmade")
-        ftattempted = request.form.get("ftattempted")
+        ftmade = int(request.form.get("ftmade"))
+        ftattempted = int(request.form.get("ftattempted"))
         location = request.form.get("location")
 
         # Do some validation
@@ -48,8 +48,10 @@ def add():
                 conn.close()
                 return redirect(url_for("log"))
             else:
+                print("not greater")
                 return redirect(url_for('error'))
         else:
+            print("not all filled")
             return redirect(url_for('error'))
     if request.method == "GET":
         return render_template('add.html')
