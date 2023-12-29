@@ -1,7 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{% block title %} Add a Free Throw Session {% endblock %}</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto text-center">
+                <h1>{% block title %} Add a Free Throw Session {% endblock %}</h1>
+                <form action="{{ url_for('add')}}" method="post">
+                    <div class="form-group col-sm-12">
+                        <label for="date" >Date: </label>
+                        <input type="date" class="form-control" id="date" name="date">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="ftmade">Free Throws Made: </label>
+                        <input type="number" class="form-control" id="ftmade" name="ftmade" placeholder="0">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="ftmade">Free Throws Attempted: </label>
+                        <input type="number" class="form-control" id="ftattempted" name="ftattempted" placeholder="0">
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="location">Location: </label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Schaumburg">
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    
+      <!--
     <form action="{{ url_for('add')}}" method="post">
         <label for="date">Date: </label>
         <input type="date" id="date" name="date" >
@@ -17,4 +47,5 @@
 
         <button type="submit">submit</button>
     </form>
+-->
 {% endblock %}
