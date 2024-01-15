@@ -1,7 +1,82 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, flash
+import pandas as pd
+from datetime import datetime
+import plotly.express as px
+import plotly.graph_objects as go
+import os
 
+def get_df():
+    conn = sqlite3.connect('database.db')
+    df = pd.read_sql_query("SELECT * FROM freethrowlog ORDER BY sessionDate ASC", conn)
+    return df
 
+# Creates Percentage column
+def createPercentage(df):
+    percentages = []
+    for index, row in df.iterrows():
+        percentages.append(round(row['ftMade']/row['ftAttempted'], 3)*100)
+    df['percent'] = percentages
+    return df
+
+def averagePercentagePlot():
+    print("Average")
+    df = get_df()
+    made = df['ftMade'].sum()
+    attempted = df['ftAttempted'].sum()
+    labels = ['Free Throws Made', 'Free Throws Missed']
+    values = [made, attempted-made]
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+    fig.write_image("images/averagePercentagePlot.png")
+    return 
+
+def locationPlot():
+    print("location")
+    df = get_df()
+    location_df = df.groupby('locationName').agg({'ftMade': 'sum', 'ftAttempted': 'sum', 'Year': 'count'}).reset_index()
+    location_df = createPercentage(location_df)
+    location_df = location_df.rename(columns={'Year': 'numSessions'})
+    location_df
+    fig = px.bar(location_df, x='locationName', y='percent', 
+                title="Location vs. Year",
+                labels={'percent': 'Percentage'},
+                hover_data=['numSessions', 'ftMade', 'ftAttempted'], height=400)
+    fig.update_yaxes(range=[65,95])
+    fig.write_image("images/locationPlot.png")
+    return
+
+# Free Throw Percentage per year
+def yearPlot():
+    print("year")
+    df = get_df()
+    date_list = df['sessionDate'].tolist()
+
+    extract_year = lambda date_str: datetime.strptime(date_str, '%Y-%m-%d').year
+    year_list = list(map(extract_year, date_list))
+    df['Year'] = year_list
+    d = {}
+    for year in year_list:
+        if year in d:
+            d[year] += 1
+        else:
+            d[year] = 1
+
+    year_df = df.groupby('Year').agg({'ftMade': 'sum', 'ftAttempted': 'sum'}).reset_index()
+    year_df = createPercentage(year_df)
+    year_df['numSessions'] = list(d.values())
+
+    fig = px.bar(year_df, x='Year', y='percent', 
+                title="Free Throw Percentage vs. Year",
+                labels={'percent': 'Percentage'},
+                hover_data=['numSessions', 'ftMade', 'ftAttempted'], height=400)
+    fig.update_yaxes(range=[60,90])
+    print("CHECK")
+    if not os.path.exists("images"):
+        os.mkdir("images")
+    fig.write_image("images/yearPlot.png", format='png')
+    print("AFTER")
+
+    return
 
 def calculateAveragePercentage(table):
     totalFTmade = 0
@@ -42,6 +117,11 @@ def statistics():
 
     # Calculate the average shooting percentage from the ft line
     percentage = calculateAveragePercentage(logs)
+    print("before")
+    #yearPlot()
+    #averagePercentagePlot()
+    #locationPlot()
+    print("after")
     return render_template('stats.html', percentage=percentage)
 
 # Add free throw session to the database
