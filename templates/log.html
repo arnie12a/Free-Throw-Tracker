@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<br><br><br><br><br><br>
     <div class="container">
         <div class="row">
             <div class="col-md-10 mx-auto text-center">
                 <h1>{% block title %} Free Throw Log {% endblock %}</h1>
+                <h3>There are {{ vals }} records</h3>
                 <table class="table table-striped">
                     <thead class="thead-dark">
                         <tr>

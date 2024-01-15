@@ -1,6 +1,8 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, flash
 
+
+
 def calculateAveragePercentage(table):
     totalFTmade = 0
     totalFTattempted = 0
@@ -8,6 +10,7 @@ def calculateAveragePercentage(table):
         totalFTmade += table[i]['ftmade']
         totalFTattempted += table[i]['ftattempted']
     return round((totalFTmade/totalFTattempted)*100, 2)
+
 
 app = Flask(__name__)
 
@@ -28,7 +31,7 @@ def log():
     conn = get_db_connection()
     logs = conn.execute('SELECT * FROM freethrowlog ORDER BY sessionDate ASC').fetchall()
     conn.close()
-    return render_template('log.html', logs=logs)
+    return render_template('log.html', logs=logs, vals=len(logs))
 
 # Page for statistics and has dashboard
 @app.route('/statistics')
