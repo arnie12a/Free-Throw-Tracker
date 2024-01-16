@@ -4,6 +4,8 @@ import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
 import os
+import seaborn as sns
+
 
 def get_df():
     conn = sqlite3.connect('database.db')
@@ -26,13 +28,15 @@ def averagePercentagePlot():
     labels = ['Free Throws Made', 'Free Throws Missed']
     values = [made, attempted - made]
 
-    # Plotting
-    fig, ax = plt.subplots()
-    ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')  # Equal aspect ratio ensures that the pie is drawn as a circle.
+    # Set Seaborn style
+    sns.set_theme()
 
+    # Plot the pie chart using Matplotlib
+    plt.figure(figsize=(6, 6))
+    plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     plt.title("Free Throws Made vs. Missed")
-    fig.savefig("static/averagePercentagePlot.png",format="png")
+
+    plt.savefig("static/averagePercentagePlot.png",format="png")
     return 
 
 def locationPlot():
@@ -44,9 +48,13 @@ def locationPlot():
     location_df
     
     # Plotting 
+    sns.set_theme()
+
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax.bar(location_df['locationName'], location_df['percent'])
+    # Create a bar plot using Seaborn
+    sns.barplot(x='locationName', y='percent', data=location_df, ax=ax)
+    sns.color_palette("Set2")
     ax.set_title("Location vs. Year")
     ax.set_xlabel('Location')
     ax.set_ylabel('Percentage')
@@ -79,14 +87,20 @@ def yearPlot():
     year_df['numSessions'] = list(d.values())
 
     # Plotting
-    fig, ax = plt.subplots(figsize=(8, 6))
+    sns.set_theme()
+    sns.color_palette("Set2")
+    fig, ax = plt.subplots(figsize=(10, 6))
 
-    ax.bar(year_df['Year'], year_df['percent'])
-    ax.set_title("Free Throw Percentage vs. Year")
-    ax.set_xlabel('Year')
+    # Create a bar plot using Seaborn
+    sns.barplot(x='Year', y='percent', data=year_df, ax=ax)
+
+    ax.set_title("Location vs. Year")
+    ax.set_xlabel('Location')
     ax.set_ylabel('Percentage')
     ax.set_ylim(60, 90)
-    plt.xticks(year_df['Year'].astype(int))
+
+    plt.tight_layout()  # Adjust layout for better display
+
     fig.savefig("static/yearPlot.png",format="png")
     return
 
