@@ -7,14 +7,10 @@
             <h1>{% block title %} Statistics {% endblock %}</h1>
             <h3>Average FT Percentage: {{ percentage }}%</h3>
             <img src="{{url_for('static', filename='averagePercentagePlot.png')}}" height="550px" width="auto"/>
-           
+            <img src="{{url_for('static', filename='locationPlot.png')}}" /><br><br><br>
+            <img src="{{url_for('static', filename='yearPlot.png')}}" />
         </div>
-        <div class="col-md-6">
-            <img src="{{url_for('static', filename='locationPlot.png')}}" height="auto" width="690px"/>
-        </div>
-          <div class="col-md-6">
-            <img src="{{url_for('static', filename='yearPlot.png')}}" height="auto" width="600px"/>
-        </div>
+            
     </div>  
 </div>
 {% endblock %}
