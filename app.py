@@ -2,8 +2,7 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, flash
 import pandas as pd
 from datetime import datetime
-import plotly.express as px
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt
 import os
 
 def get_df():
@@ -20,34 +19,49 @@ def createPercentage(df):
     return df
 
 def averagePercentagePlot():
-    print("Average")
+    # Manipulating Data
     df = get_df()
     made = df['ftMade'].sum()
     attempted = df['ftAttempted'].sum()
     labels = ['Free Throws Made', 'Free Throws Missed']
-    values = [made, attempted-made]
-    fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
-    fig.write_image("images/averagePercentagePlot.png")
+    values = [made, attempted - made]
+
+    # Plotting
+    fig, ax = plt.subplots()
+    ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Equal aspect ratio ensures that the pie is drawn as a circle.
+
+    plt.title("Free Throws Made vs. Missed")
+    fig.savefig("static/averagePercentagePlot.png",format="png")
     return 
 
 def locationPlot():
-    print("location")
+
+    # Manipulating data
     df = get_df()
-    location_df = df.groupby('locationName').agg({'ftMade': 'sum', 'ftAttempted': 'sum', 'Year': 'count'}).reset_index()
+    location_df = df.groupby('locationName').agg({'ftMade': 'sum', 'ftAttempted': 'sum'}).reset_index()
     location_df = createPercentage(location_df)
-    location_df = location_df.rename(columns={'Year': 'numSessions'})
     location_df
-    fig = px.bar(location_df, x='locationName', y='percent', 
-                title="Location vs. Year",
-                labels={'percent': 'Percentage'},
-                hover_data=['numSessions', 'ftMade', 'ftAttempted'], height=400)
-    fig.update_yaxes(range=[65,95])
-    fig.write_image("images/locationPlot.png")
+    
+    # Plotting 
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax.bar(location_df['locationName'], location_df['percent'])
+    ax.set_title("Location vs. Year")
+    ax.set_xlabel('Location')
+    ax.set_ylabel('Percentage')
+    ax.set_ylim(65, 95)
+
+    plt.xticks(rotation=45, ha='right')  # Rotate x-axis labels for better visibility
+    plt.tight_layout()  # Adjust layout for better display
+
+    fig.savefig("static/locationPlot.png",format="png")
     return
 
 # Free Throw Percentage per year
 def yearPlot():
-    print("year")
+
+    # Manipulating data
     df = get_df()
     date_list = df['sessionDate'].tolist()
 
@@ -60,22 +74,20 @@ def yearPlot():
             d[year] += 1
         else:
             d[year] = 1
-
     year_df = df.groupby('Year').agg({'ftMade': 'sum', 'ftAttempted': 'sum'}).reset_index()
     year_df = createPercentage(year_df)
     year_df['numSessions'] = list(d.values())
 
-    fig = px.bar(year_df, x='Year', y='percent', 
-                title="Free Throw Percentage vs. Year",
-                labels={'percent': 'Percentage'},
-                hover_data=['numSessions', 'ftMade', 'ftAttempted'], height=400)
-    fig.update_yaxes(range=[60,90])
-    print("CHECK")
-    if not os.path.exists("images"):
-        os.mkdir("images")
-    fig.write_image("images/yearPlot.png", format='png')
-    print("AFTER")
+    # Plotting
+    fig, ax = plt.subplots(figsize=(8, 6))
 
+    ax.bar(year_df['Year'], year_df['percent'])
+    ax.set_title("Free Throw Percentage vs. Year")
+    ax.set_xlabel('Year')
+    ax.set_ylabel('Percentage')
+    ax.set_ylim(60, 90)
+    plt.xticks(year_df['Year'].astype(int))
+    fig.savefig("static/yearPlot.png",format="png")
     return
 
 def calculateAveragePercentage(table):
@@ -117,11 +129,11 @@ def statistics():
 
     # Calculate the average shooting percentage from the ft line
     percentage = calculateAveragePercentage(logs)
-    print("before")
-    #yearPlot()
-    #averagePercentagePlot()
-    #locationPlot()
-    print("after")
+    if not os.path.exists("static"):
+        os.makedirs("static")
+    yearPlot()
+    averagePercentagePlot()
+    locationPlot()
     return render_template('stats.html', percentage=percentage)
 
 # Add free throw session to the database
