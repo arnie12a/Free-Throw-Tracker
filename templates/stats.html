@@ -6,7 +6,9 @@
         <div class="col-md-10 mx-auto text-center">    
             <h1>{% block title %} Statistics {% endblock %}</h1>
             <h3>Average FT Percentage: {{ percentage }}%</h3>
-            
+            <img src="{{url_for('static', filename='averagePercentagePlot.png')}}" />
+            <img src="{{url_for('static', filename='locationPlot.png')}}" />
+            <img src="{{url_for('static', filename='yearPlot.png')}}" />
         </div>
     </div>  
 </div>
