@@ -10,12 +10,15 @@ An application that allows me to track my free throw percentage.
 
 ## About
 
-In high school, I played basketball and after every single practice our coach would have us shoot free throws and record how many we made out of 10 to our team manager. 
+In high school, I played basketball and after every single practice our coach would have us shoot free throws and record how many we made out of 10 to our team manager and she would record it in excel. Then over time our coach would see how we shoot free throws as a team and individually over time. This inspired me to make my own program in Java which I had just recently learned at the time. Now fast forward to the end of college and I remade the free throw tracker using Flask.
 
 
 ## Usage
 
-Describe how to use your project, including any commands or configurations needed.
+The project has three components.
+1) Adding Free Throw Data
+2) Managing Free Throw Data Log
+3) Statistics Dashboard
 
 ## Pages
 
