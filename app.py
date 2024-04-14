@@ -55,7 +55,7 @@ def locationPlot():
     # Create a bar plot using Seaborn
     sns.barplot(x='locationName', y='percent', data=location_df, ax=ax)
     sns.color_palette("Set2")
-    ax.set_title("Location vs. Year")
+    ax.set_title("Percentage vs. Location")
     ax.set_xlabel('Location')
     ax.set_ylabel('Percentage')
     ax.set_ylim(65, 95)
@@ -95,8 +95,8 @@ def yearPlot():
     # Create a bar plot using Seaborn
     sns.barplot(x='Year', y='percent', data=year_df, ax=ax)
 
-    ax.set_title("Location vs. Year")
-    ax.set_xlabel('Location')
+    ax.set_title("Percentage vs. Year")
+    ax.set_xlabel('Year')
     ax.set_ylabel('Percentage')
     ax.set_ylim(60, 90)
 
