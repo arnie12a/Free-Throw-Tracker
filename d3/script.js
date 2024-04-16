@@ -54,7 +54,6 @@ function locationViz(){
     .attr("y", function(d) { return y(d.percent); })
     .attr("height", function(d) { return height - y(d.percent); })
     .delay(function(d,i){console.log(i) ; return(i*100)})
-
     })
 }
 function yearViz(){
@@ -177,10 +176,32 @@ function timesViz(){
     })
 }
 
+function showInfo() {
+    var dropdown = document.getElementById("dropdown");
+    var year = dropdown.value;
+    var infoDiv = document.getElementById("yearInfo");
+
+    infoDiv.innerHTML = "";
+
+    if (year == "2020"){
+        infoDiv.innerHTML = "2020";
+    } else if (year == "2021"){
+        infoDiv.innerHTML = "2021";
+    } else if (year == "2022"){
+        infoDiv.innerHTML = "2022";
+    } else if (year == "2023"){
+        infoDiv.innerHTML = "2023";
+    } else if (year == "2024"){
+        infoDiv.innerHTML = "2024";
+    } else {
+        infoDiv.innerHTML = "All Years";
+    }
+
+}
 
 
-console.log("STARTING")
+
+
 locationViz()
 yearViz()
 timesViz()
-console.log("ENDING")
