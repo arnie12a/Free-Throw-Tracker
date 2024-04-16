@@ -10,6 +10,7 @@ import seaborn as sns
 def get_df():
     conn = sqlite3.connect('database.db')
     df = pd.read_sql_query("SELECT * FROM freethrowlog ORDER BY sessionDate ASC", conn)
+    df.to_csv("./d3/data.csv")
     return df
 
 # Creates Percentage column
@@ -45,7 +46,7 @@ def locationPlot():
     df = get_df()
     location_df = df.groupby('locationName').agg({'ftMade': 'sum', 'ftAttempted': 'sum'}).reset_index()
     location_df = createPercentage(location_df)
-    location_df.to_csv('location.csv')
+    location_df.to_csv('./d3/location.csv')
     
     # Plotting 
     sns.set_theme()
@@ -85,7 +86,7 @@ def yearPlot():
     year_df = df.groupby('Year').agg({'ftMade': 'sum', 'ftAttempted': 'sum'}).reset_index()
     year_df = createPercentage(year_df)
     year_df['numSessions'] = list(d.values())
-    year_df.to_csv("year.csv")
+    year_df.to_csv("./d3/year.csv")
 
     # Plotting
     sns.set_theme()
